@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react';
 import './App.css';
 
-const API_URL = 'http://localhost:8000/predict';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8000/ws/predict';
+const API_URL = `${BACKEND_URL}/predict`;
 
 function drawBoxes(ctx, predictions, scaleX = 1, scaleY = 1) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -71,7 +73,7 @@ function App() {
     }
 
     if (!wsRef.current || wsRef.current.readyState !== 1) {
-      const socket = new window.WebSocket('ws://localhost:8000/ws/predict');
+  const socket = new window.WebSocket(WS_URL);
       wsRef.current = socket;
       socket.onopen = () => {
         setWsActive(true);
